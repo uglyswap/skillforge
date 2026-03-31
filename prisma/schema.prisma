@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("user")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  scrapeJobs ScrapeJob[]
+  skills     GeneratedSkill[]
+  apiKeys    ApiKey[]
+  settings   UserSettings?
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  userId    String
+  provider  String
+  keyValue  String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+}
+
+model UserSettings {
+  id              String  @id @default(cuid())
+  userId          String  @unique
+  defaultProvider String?
+  defaultModel    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ScrapeJob {
+  id             String    @id @default(cuid())
+  userId         String
+  url            String
+  status         String    @default("pending")
+  maxDepth       Int       @default(5)
+  followExternal Boolean   @default(true)
+  pagesFound     Int       @default(0)
+  pagesScraped   Int       @default(0)
+  currentUrl     String?
+  outputFormat   String    @default("markdown")
+  outputPath     String?
+  errorMessage   String?
+  createdAt      DateTime  @default(now())
+  completedAt    DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model GeneratedSkill {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  sourceDocName String
+  templateId    String?
+  content       String
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SkillTemplate {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  description  String
+  systemPrompt String
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SetupStatus {
+  id          String  @id @default("singleton")
+  isSetupDone Boolean @default(false)
+}
