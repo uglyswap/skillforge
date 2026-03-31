@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  skillforge:
+    build: .
+    container_name: skillforge
+    restart: unless-stopped
+    ports:
+      - "3737:3000"
+    volumes:
+      - skillforge-data:/app/data
+      - skillforge-output:/app/output
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - APP_URL=${APP_URL:-http://localhost:3737}
+    env_file:
+      - .env
+
+volumes:
+  skillforge-data:
+  skillforge-output:
