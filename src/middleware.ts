@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyJwtEdge } from "./lib/jwt-edge";
+import { verifyJwt } from "./lib/auth";
+
+export const runtime = "nodejs";
 
 const PUBLIC_PATHS = [
   "/login",
@@ -37,7 +39,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  const payload = await verifyJwtEdge(token);
+  const payload = verifyJwt(token);
   if (!payload) {
     const response = NextResponse.redirect(new URL("/login", request.url));
     response.cookies.delete("sf-token");
