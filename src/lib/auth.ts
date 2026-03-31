@@ -46,9 +46,13 @@ export function verifyJwt(token: string): JwtPayload | null {
 export async function setAuthCookie(payload: JwtPayload): Promise<void> {
   const token = signJwt(payload);
   const cookieStore = await cookies();
+  const forceSecure = process.env.COOKIE_SECURE;
+  const secure = forceSecure !== undefined
+    ? forceSecure === "true"
+    : process.env.NODE_ENV === "production";
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure,
     sameSite: "lax",
     path: "/",
     maxAge: 7 * 24 * 60 * 60,
