@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyJwt } from "./lib/auth";
+import { verifyJwtEdge } from "./lib/jwt-edge";
 
 const PUBLIC_PATHS = [
   "/login",
@@ -20,7 +20,7 @@ function isStaticPath(pathname: string): boolean {
   );
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (isStaticPath(pathname)) {
@@ -37,7 +37,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  const payload = verifyJwt(token);
+  const payload = await verifyJwtEdge(token);
   if (!payload) {
     const response = NextResponse.redirect(new URL("/login", request.url));
     response.cookies.delete("sf-token");
