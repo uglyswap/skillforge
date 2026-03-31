@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
   });
 
   const apiKeyStatus = {
-    openrouter: apiKeys.some((k) => k.provider === "openrouter"),
-    codingplan: apiKeys.some((k) => k.provider === "codingplan"),
+    openrouter: apiKeys.some((k: { provider: string }) => k.provider === "openrouter"),
+    codingplan: apiKeys.some((k: { provider: string }) => k.provider === "codingplan"),
   };
 
   return NextResponse.json({

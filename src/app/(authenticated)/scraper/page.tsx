@@ -138,7 +138,7 @@ export default function ScraperPage() {
             <div className="grid gap-4 md:grid-cols-3">
               <div className="space-y-2">
                 <Label>Profondeur max</Label>
-                <Select value={maxDepth} onValueChange={setMaxDepth}>
+                <Select value={maxDepth} onValueChange={(v) => v && setMaxDepth(v)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -154,7 +154,7 @@ export default function ScraperPage() {
 
               <div className="space-y-2">
                 <Label>Format de sortie</Label>
-                <Select value={outputFormat} onValueChange={setOutputFormat}>
+                <Select value={outputFormat} onValueChange={(v) => v && setOutputFormat(v)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

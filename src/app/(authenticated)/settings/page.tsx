@@ -362,7 +362,7 @@ export default function SettingsPage() {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label>Provider</Label>
-              <Select value={defaultProvider} onValueChange={setDefaultProvider}>
+              <Select value={defaultProvider} onValueChange={(v) => v && setDefaultProvider(v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez" />
                 </SelectTrigger>
@@ -392,7 +392,7 @@ export default function SettingsPage() {
                   </Button>
                 )}
               </div>
-              <Select value={defaultModel} onValueChange={setDefaultModel}>
+              <Select value={defaultModel} onValueChange={(v) => v && setDefaultModel(v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez" />
                 </SelectTrigger>
@@ -418,7 +418,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <CardTitle>Gestion des utilisateurs</CardTitle>
               <Dialog open={userDialogOpen} onOpenChange={setUserDialogOpen}>
-                <DialogTrigger asChild>
+                <DialogTrigger>
                   <Button size="sm">
                     <UserPlus className="mr-2 h-4 w-4" />
                     Inviter
@@ -452,7 +452,7 @@ export default function SettingsPage() {
                       <Label>Rôle</Label>
                       <Select
                         value={newUserRole}
-                        onValueChange={setNewUserRole}
+                        onValueChange={(v) => v && setNewUserRole(v)}
                       >
                         <SelectTrigger>
                           <SelectValue />

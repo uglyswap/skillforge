@@ -208,7 +208,7 @@ export default function SkillsPage() {
 
               <div className="space-y-2">
                 <Label>Template</Label>
-                <Select value={templateId} onValueChange={setTemplateId}>
+                <Select value={templateId} onValueChange={(v) => v && setTemplateId(v)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez un template" />
                   </SelectTrigger>
@@ -225,7 +225,7 @@ export default function SkillsPage() {
 
               <div className="space-y-2">
                 <Label>Provider</Label>
-                <Select value={provider} onValueChange={setProvider}>
+                <Select value={provider} onValueChange={(v) => v && setProvider(v)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez un provider" />
                   </SelectTrigger>
@@ -238,7 +238,7 @@ export default function SkillsPage() {
 
               <div className="space-y-2">
                 <Label>Modèle</Label>
-                <Select value={model} onValueChange={setModel}>
+                <Select value={model} onValueChange={(v) => v && setModel(v)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez un modèle" />
                   </SelectTrigger>

@@ -57,7 +57,7 @@ export default async function DashboardPage() {
             </p>
           ) : (
             <div className="space-y-2">
-              {recentJobs.map((job) => (
+              {recentJobs.map((job: { id: string; url: string; status: string }) => (
                 <div
                   key={job.id}
                   className="flex items-center justify-between rounded-md border p-3 text-sm"
