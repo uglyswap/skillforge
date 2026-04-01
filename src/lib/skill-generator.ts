@@ -2,9 +2,10 @@ import { prisma } from "./prisma";
 import { getProvider } from "./ai-providers";
 import { decrypt } from "./encryption";
 
-// CodingPlan models have strict token limits (e.g. GLM: 202K tokens).
-// ~4 chars/token average → 200K chars ≈ 50-70K tokens, safe for all models.
-const MAX_CONTENT_CHARS = 200_000;
+// CodingPlan models have strict input token limits (e.g. GLM: 202K tokens).
+// With prompt overhead + template, keep content conservative.
+// ~3-4 chars/token → 100K chars ≈ 25-35K tokens, leaves room for system prompt.
+const MAX_CONTENT_CHARS = 100_000;
 
 interface GenerateSkillConfig {
   userId: string;
