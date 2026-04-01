@@ -2,8 +2,9 @@ import { prisma } from "./prisma";
 import { getProvider } from "./ai-providers";
 import { decrypt } from "./encryption";
 
-// CodingPlan has a 6MB body limit — keep content well under that
-const MAX_CONTENT_CHARS = 800_000; // ~800KB of text, leaves room for prompt + JSON overhead
+// CodingPlan models have strict token limits (e.g. GLM: 202K tokens).
+// ~4 chars/token average → 200K chars ≈ 50-70K tokens, safe for all models.
+const MAX_CONTENT_CHARS = 200_000;
 
 interface GenerateSkillConfig {
   userId: string;
