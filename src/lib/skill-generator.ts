@@ -2,6 +2,9 @@ import { prisma } from "./prisma";
 import { getProvider } from "./ai-providers";
 import { decrypt } from "./encryption";
 
+// CodingPlan has a 6MB body limit — keep content well under that
+const MAX_CONTENT_CHARS = 800_000; // ~800KB of text, leaves room for prompt + JSON overhead
+
 interface GenerateSkillConfig {
   userId: string;
   fileName: string;
@@ -46,9 +49,16 @@ export async function generateSkill(
   const currentDate = new Date().toISOString().split("T")[0];
   const skillName = config.skillName || "à déterminer";
 
+  // Truncate content if too large to avoid API body size limits (CodingPlan 6MB)
+  let docContent = config.fileContent;
+  if (docContent.length > MAX_CONTENT_CHARS) {
+    docContent = docContent.slice(0, MAX_CONTENT_CHARS) +
+      `\n\n[... Documentation tronquée à ${Math.round(MAX_CONTENT_CHARS / 1000)}K caractères sur ${Math.round(config.fileContent.length / 1000)}K total ...]`;
+  }
+
   const systemPrompt = template.systemPrompt
     .replaceAll("{{DOC_NAME}}", docName)
-    .replaceAll("{{DOC_CONTENT}}", config.fileContent)
+    .replaceAll("{{DOC_CONTENT}}", docContent)
     .replaceAll("{{SKILL_NAME}}", skillName)
     .replaceAll("{{CURRENT_DATE}}", currentDate);
 

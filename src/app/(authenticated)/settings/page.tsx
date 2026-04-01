@@ -259,7 +259,10 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Settings</h1>
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Paramètres</h1>
+        <p className="text-sm text-muted-foreground mt-1">Configuration des clés API et préférences</p>
+      </div>
 
       <Card>
         <CardHeader>

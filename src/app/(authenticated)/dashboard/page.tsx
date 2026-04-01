@@ -27,20 +27,25 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-sm text-muted-foreground mt-1">Vue d&apos;ensemble de votre activité</p>
+      </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-5 md:grid-cols-3">
         {stats.map((stat) => (
-          <Card key={stat.label}>
+          <Card key={stat.label} className="shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 {stat.label}
               </CardTitle>
-              <stat.icon className="h-4 w-4 text-gray-400" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                <stat.icon className="h-4 w-4 text-primary" />
+              </div>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold">{stat.value}</p>
+              <p className="text-3xl font-bold tracking-tight">{stat.value}</p>
             </CardContent>
           </Card>
         ))}

@@ -3,6 +3,7 @@ version: "3.8"
 services:
   skillforge:
     build: .
+    image: app-skillforge
     container_name: skillforge
     restart: unless-stopped
     ports:
@@ -14,9 +15,15 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - ENCRYPTION_KEY=${ENCRYPTION_KEY}
       - APP_URL=${APP_URL:-http://localhost:3737}
+      - DATABASE_URL=${DATABASE_URL:-file:../data/skillforge.db}
+      - COOKIE_SECURE=false
     env_file:
       - .env
 
 volumes:
   skillforge-data:
+    external: true
+    name: app_skillforge-data
   skillforge-output:
+    external: true
+    name: app_skillforge-output

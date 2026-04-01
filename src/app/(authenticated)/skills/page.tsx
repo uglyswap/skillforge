@@ -177,7 +177,10 @@ export default function SkillsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Skill Generator</h1>
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Skill Generator</h1>
+        <p className="text-sm text-muted-foreground mt-1">Transformez vos documentations en skills Claude Code</p>
+      </div>
 
       <Card>
         <CardHeader>
