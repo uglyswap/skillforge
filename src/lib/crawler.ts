@@ -37,9 +37,19 @@ function normalizeUrl(raw: string): string {
   }
 }
 
-function isSameDomain(urlA: string, urlB: string): boolean {
+function isSameOriginAndPath(startUrl: string, linkUrl: string): boolean {
   try {
-    return new URL(urlA).hostname === new URL(urlB).hostname;
+    const start = new URL(startUrl);
+    const link = new URL(linkUrl);
+    // Must be same hostname (subdomain-aware)
+    if (start.hostname !== link.hostname) return false;
+    // Link must be under the same base path as startUrl
+    // e.g. startUrl = https://docs.example.com/guide
+    //   -> /guide/page1 = OK, /other = NOT OK
+    // But if startUrl is root (/) then all paths are OK
+    const basePath = start.pathname === '/' ? '/' : start.pathname.replace(/\/$/, '');
+    if (basePath === '/') return true;
+    return link.pathname === basePath || link.pathname.startsWith(basePath + '/');
   } catch {
     return false;
   }
@@ -141,7 +151,7 @@ export async function crawlSite(config: CrawlConfig): Promise<CrawledPage[]> {
             if (visited.has(normalized)) continue;
             visited.add(normalized);
 
-            const linkIsExternal = !isSameDomain(startUrl, normalized);
+            const linkIsExternal = !isSameOriginAndPath(startUrl, normalized);
 
             if (linkIsExternal) {
               if (followExternal) {
