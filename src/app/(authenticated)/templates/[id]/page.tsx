@@ -65,9 +65,6 @@ export default function TemplateEditPage({
 
       if (res.ok) {
         toast.success("Template sauvegardé");
-        if (isDefault) {
-          await fetch(`/api/templates/${id}/default`, { method: "PUT" });
-        }
         fetchTemplate();
       } else {
         const data: { error?: string } = await res.json();

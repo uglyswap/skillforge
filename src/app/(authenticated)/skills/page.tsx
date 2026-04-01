@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,6 +67,9 @@ export default function SkillsPage() {
     }
   }, []);
 
+  const templateIdRef = useRef(templateId);
+  templateIdRef.current = templateId;
+
   const fetchTemplates = useCallback(async () => {
     try {
       const res = await fetch("/api/templates");
@@ -74,14 +77,19 @@ export default function SkillsPage() {
         const data: Template[] = await res.json();
         setTemplates(data);
         const defaultTpl = data.find((t) => t.isDefault);
-        if (defaultTpl && !templateId) {
+        if (defaultTpl && !templateIdRef.current) {
           setTemplateId(defaultTpl.id);
         }
       }
     } catch {
       // ignore
     }
-  }, [templateId]);
+  }, []);
+
+  const providerRef = useRef(provider);
+  providerRef.current = provider;
+  const modelRef = useRef(model);
+  modelRef.current = model;
 
   const fetchSettings = useCallback(async () => {
     try {
@@ -89,17 +97,17 @@ export default function SkillsPage() {
       if (res.ok) {
         const data: UserSettings = await res.json();
         setSettings(data);
-        if (data.defaultProvider && !provider) {
+        if (data.defaultProvider && !providerRef.current) {
           setProvider(data.defaultProvider);
         }
-        if (data.defaultModel && !model) {
+        if (data.defaultModel && !modelRef.current) {
           setModel(data.defaultModel);
         }
       }
     } catch {
       // ignore
     }
-  }, [provider, model]);
+  }, []);
 
   const fetchModels = useCallback(async (prov: string) => {
     try {
